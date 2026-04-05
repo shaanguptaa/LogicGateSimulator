@@ -1,22 +1,22 @@
 package logicGateSimulator;
 
 import java.awt.EventQueue;
+import java.io.Serial;
 import javax.swing.JFrame;
 
 public class LogicGateSimulator extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LogicGateSimulator frame = new LogicGateSimulator();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	@Serial
+    private static final long serialVersionUID = 1L;
+	static void main() {
+		EventQueue.invokeLater(() -> {
+            try {
+                LogicGateSimulator frame = new LogicGateSimulator();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 	}
 
 	public LogicGateSimulator() {

@@ -40,14 +40,14 @@ public class LogicGates {
 		
 		String output = "";
 		int l = inA.length() - inB.length();
-		
+
 		for(int i = 0; i < Math.abs(l); i++) {
 			if(l<0)
 				inA = "0" + inA;
 			else if(l>0)
 				inB = "0" + inB;
 		}
-		
+
 		for(int i = 0; i < inA.length(); i++) {
 			output += (char) (inA.charAt(i) | inB.charAt(i));
 		}
@@ -127,7 +127,7 @@ public class LogicGates {
 	
 //	HALF ADDER operation
 	static String[] halfAdder(String inA, String inB) {
-		String output[] = {"", ""}; //sum = output[0], carry = output[1]
+		String[] output = {"", ""}; //sum = output[0], carry = output[1]
 		
 //		sum = A XOR B
 //		carry = A AND B
@@ -141,7 +141,7 @@ public class LogicGates {
 	
 //	FULL ADDER operation
 	static String[] fullAdder(String inA, String inB, String inC) {
-		String output[] = {"", ""}; //sum = output[0], carry = output[1]
+		String[] output = {"", ""}; //sum = output[0], carry = output[1]
 		
 //		sum = (A XOR B) XOR C
 //		carry = ((A XOR B) AND C) OR (A AND B)
@@ -154,7 +154,7 @@ public class LogicGates {
 	
 //	HALF SUBTRACTOR operation
 	static String[] halfSubtractor(String inA, String inB) {
-		String output[] = {"", ""}; //diff = output[0], borrow = output[1]
+		String[] output = {"", ""}; //diff = output[0], borrow = output[1]
 		
 //		diff = A XOR B
 //		borrow = (NOT A) AND B
@@ -167,7 +167,7 @@ public class LogicGates {
 	
 //	FULL SUBTRACTOR operation
 	static String[] fullSubtractor(String inA, String inB, String inC) {
-		String output[] = {"", ""}; //diff = output[0], borrow = output[1]
+		String[] output = {"", ""}; //diff = output[0], borrow = output[1]
 		
 //		diff = (A XOR B) XOR C
 //		borrow = ((A XOR B) AND C) OR (A AND B)
@@ -180,7 +180,7 @@ public class LogicGates {
 	
 //	S-R FLIPFLOP operation
 	static String[] srFlipflop(String inA, String clk, String inB) {
-		String output[] = {"0", "0"};
+		String[] output = {"0", "0"};
 
 		
 		if(clk.equals("1")) {
@@ -215,7 +215,7 @@ public class LogicGates {
 	
 //	J-K FLIPFLOP operation
 	static String[] jkFlipflop(String inA, String clk, String inB) {
-		String output[] = {"0", "0"};
+		String[] output = {"0", "0"};
 
 		
 		if(clk.equals("1")) {
@@ -249,7 +249,7 @@ public class LogicGates {
 	
 //	D FLIPFLOP operation
 	static String[] dFlipflop(String inA, String clk) {
-		String output[] = {"0", "0"};
+		String[] output = {"0", "0"};
 
 		
 		if(clk.equals("1")) {
@@ -273,7 +273,7 @@ public class LogicGates {
 	
 //	T FLIPFLOP operation
 	static String[] tFlipflop(String inA, String clk) {
-		String output[] = {"0", "0"};
+		String[] output = {"0", "0"};
 
 		
 		if(clk.equals("1") && inA.equals("1")) {

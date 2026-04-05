@@ -19,5 +19,4 @@ public class Values {
 		return new Rectangle(X, Y, Width, Height);		
 	}
 	
-	
 }
