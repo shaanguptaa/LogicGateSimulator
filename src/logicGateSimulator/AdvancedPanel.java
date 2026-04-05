@@ -19,25 +19,28 @@ import javax.swing.ImageIcon;
 import javax.swing.JToggleButton;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.io.Serial;
+import java.util.logging.Logger;
 
 public class AdvancedPanel extends JPanel {
-	private static final long serialVersionUID = 1L;
-	private JButton switchMode;
-	private JPanel toolbar;
-	private JButton calculate_btn;
-	private JLabel gate;
-	private JLabel heading;
-	private JLabel state_lbl;
-	private JToggleButton inputA;
-	private JToggleButton inputB;
-	private JToggleButton inputC;
-	private JToggleButton outputA;
-	private JToggleButton outputB;
-	private ImageIcon bit0, bit1;
-	private ImageIcon haddIcon, faddIcon;
-	private ImageIcon hsubIcon, fsubIcon;
-	private ImageIcon srffIcon, jkffIcon;
-	private ImageIcon dffIcon, tffIcon;
+	@Serial
+    private static final long serialVersionUID = 1L;
+	private final JButton switchMode;
+	private final JPanel toolbar;
+	private final JButton calculate_btn;
+	private final JLabel gate;
+	private final JLabel heading;
+	private final JLabel state_lbl;
+	private final JToggleButton inputA;
+	private final JToggleButton inputB;
+	private final JToggleButton inputC;
+	private final JToggleButton outputA;
+	private final JToggleButton outputB;
+	private final ImageIcon bit0, bit1;
+	private final ImageIcon haddIcon, faddIcon;
+	private final ImageIcon hsubIcon, fsubIcon;
+	private final ImageIcon srffIcon, jkffIcon;
+	private final ImageIcon dffIcon, tffIcon;
 
 	
 	public AdvancedPanel() {
@@ -52,8 +55,8 @@ public class AdvancedPanel extends JPanel {
 		switchMode = new JButton("Basic Mode");
 		switchMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame f = (JFrame) SwingUtilities.getRoot(Values.advancedPanel);
-				f.setContentPane(Values.basicPanel);
+				JFrame f = (JFrame) SwingUtilities.getRoot(Values.getAdvancedPanel());
+				f.setContentPane(Values.getBasicPanel());
 				f.setTitle(Values.Title);
 			}
 		});
@@ -61,18 +64,22 @@ public class AdvancedPanel extends JPanel {
 		switchMode.setBackground(Color.WHITE);
 		switchMode.setBounds(591, 419, 164, 38);
 		add(switchMode);
-		
-		
-		bit0 = new ImageIcon(LogicGateSimulator.class.getResource("/assets/0.png"));
-		bit1 = new ImageIcon(LogicGateSimulator.class.getResource("/assets/1.png"));
-		haddIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/h-add.png"));
-		faddIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/f-add.png"));
-		hsubIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/h-sub.png"));
-		fsubIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/f-sub.png"));
-		srffIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/sr-ff.png"));
-		jkffIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/jk-ff.png"));
-		dffIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/d-ff.png"));
-		tffIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/t-ff.png"));
+
+		try {
+			bit0 = new ImageIcon(LogicGateSimulator.class.getResource(Paths.BIT_0_URL), "BIT 0");
+			bit1 = new ImageIcon(LogicGateSimulator.class.getResource(Paths.BIT_1_URL), "BIT 1");
+			haddIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.HALF_ADDER_URL), "HALF ADDER");
+			faddIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.FULL_ADDER_URL), "FULL ADDER");
+			hsubIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.HALF_SUBTRACTOR_URL), "HALF SUBTRACTOR");
+			fsubIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.FULL_SUBTRACTOR_URL), "FULL SUBTRACTOR");
+			srffIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.SR_FLIPFLOP_URL), "SR FLIP FLOP");
+			jkffIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.JK_FLIPFLOP_URL), "JK FLIP FLOP");
+			dffIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.D_FLIPFLOP_URL), "D FLIP FLOP");
+			tffIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.T_FLIPFLOP_URL), "T FLIP FLOP");
+		} catch (NullPointerException e) {
+			Logger.getAnonymousLogger().severe("Failed to load advanced panel icons.");
+			throw new RuntimeException(e);
+		}
 		
 		toolbar = new JPanel();
 		toolbar.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.GRAY));
@@ -91,34 +98,29 @@ public class AdvancedPanel extends JPanel {
 		separator.setBounds(0, 25, toolbar.getWidth(), 2);
 		toolbar.add(separator);
 		
-		ActionListener actionListener = new ActionListener() {
+		ActionListener actionListener = e -> {
+            // TODO Auto-generated method stub
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-				switch(e.getActionCommand()) {
-				case "H-ADDER": updateUI("hadd");
-								break;
-				case "F-ADDER": updateUI("fadd");
-								break;
-				case "H-SUBTRACTOR": updateUI("hsub");
-								break;
-				case "F-SUBTRACTOR": updateUI("fsub");
-								break;
-				case "SR-FLIPFLOP": updateUI("srff");
-								break;
-				case "JK-FLIPFLOP": updateUI("jkff");
-								break;
-				case "D-FLIPFLOP": updateUI("dff");
-								break;
-				case "T-FLIPFLOP": updateUI("tff");
-								break;
-				}
-				
-			}
-			
-		};
+            switch(e.getActionCommand()) {
+            case "H-ADDER": updateUI("hadd");
+                            break;
+            case "F-ADDER": updateUI("fadd");
+                            break;
+            case "H-SUBTRACTOR": updateUI("hsub");
+                            break;
+            case "F-SUBTRACTOR": updateUI("fsub");
+                            break;
+            case "SR-FLIPFLOP": updateUI("srff");
+                            break;
+            case "JK-FLIPFLOP": updateUI("jkff");
+                            break;
+            case "D-FLIPFLOP": updateUI("dff");
+                            break;
+            case "T-FLIPFLOP": updateUI("tff");
+                            break;
+            }
+
+        };
 		
 		JButton hadder = new JButton("HALF ADDER");
 		hadder.setActionCommand("H-ADDER");
@@ -210,27 +212,27 @@ public class AdvancedPanel extends JPanel {
 		calculate_btn = new JButton("Perfrom Operation");
 		calculate_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String output[] = {"", ""};
+				String[] output = {"", ""};
 				
 				switch(heading.getText()) {
-				case "HALF ADDER": output = LogicGates.halfAdder(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1");
-							break;
-				case "FULL ADDER": output = LogicGates.fullAdder(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1", inputC.getIcon() == bit0?"0":"1");
-							break;
-				case "HALF SUBTRACTOR": output = LogicGates.halfSubtractor(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1");
-							break;
-				case "FULL SUBTRACTOR": output = LogicGates.fullSubtractor(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1", inputC.getIcon() == bit0?"0":"1");
-							break;
-				case "SR FLIP FLOP": output = LogicGates.srFlipflop(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1", inputC.getIcon() == bit0?"0":"1");
-							state_lbl.setText("State : " + Values.ffState);
-							break;
-				case "JK FLIP FLOP": output = LogicGates.jkFlipflop(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1", inputC.getIcon() == bit0?"0":"1");
-							state_lbl.setText("State : " + Values.ffState);
-							break;
-				case "D FLIP FLOP": output = LogicGates.dFlipflop(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1");
-							break;
-				case "T FLIP FLOP": output = LogicGates.tFlipflop(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1");
-							break;
+                    case "HALF ADDER": output = LogicGates.halfAdder(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1");
+                                break;
+                    case "FULL ADDER": output = LogicGates.fullAdder(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1", inputC.getIcon() == bit0?"0":"1");
+                                break;
+                    case "HALF SUBTRACTOR": output = LogicGates.halfSubtractor(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1");
+                                break;
+                    case "FULL SUBTRACTOR": output = LogicGates.fullSubtractor(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1", inputC.getIcon() == bit0?"0":"1");
+                                break;
+                    case "SR FLIP FLOP": output = LogicGates.srFlipflop(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1", inputC.getIcon() == bit0?"0":"1");
+                                state_lbl.setText("State : " + Values.ffState);
+                                break;
+                    case "JK FLIP FLOP": output = LogicGates.jkFlipflop(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1", inputC.getIcon() == bit0?"0":"1");
+                                state_lbl.setText("State : " + Values.ffState);
+                                break;
+                    case "D FLIP FLOP": output = LogicGates.dFlipflop(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1");
+                                break;
+                    case "T FLIP FLOP": output = LogicGates.tFlipflop(inputA.getIcon() == bit0?"0":"1", inputB.getIcon() == bit0?"0":"1");
+                                break;
 				}
 				
 				outputA.setIcon(output[0].equals("0")?bit0:bit1);
@@ -303,10 +305,7 @@ public class AdvancedPanel extends JPanel {
 		state_lbl.setBackground(getBackground());
 		state_lbl.setBounds(462, 370, 205, 38);
 		add(state_lbl);
-		
-		
-		
-		
+
 		updateUI("hadd");
 	}
 	
@@ -318,7 +317,7 @@ public class AdvancedPanel extends JPanel {
 		outputB.setIcon(bit1);
 		LogicGates.q = "0";
 		LogicGates.qbar = "1";
-		if(block == "hadd") {
+		if("hadd".equals(block)) {
 			
 			heading.setText("HALF ADDER");
 			gate.setBounds(getWidth()/2 - 110, getHeight()/2 - 150, 351, 236);
@@ -332,7 +331,7 @@ public class AdvancedPanel extends JPanel {
 			outputA.setBounds(gate.getX() + gate.getWidth(), gate.getY() + 31, 35, 35);
 			outputB.setBounds(gate.getX() + gate.getWidth(), gate.getY() + 172, 35, 35);
 			
-		} else if(block == "fadd") {
+		} else if("fadd".equals(block)) {
 			
 			heading.setText("FULL ADDER");
 			gate.setBounds(getWidth()/2 - 160, getHeight()/2 - 140, 487, 226);
@@ -347,7 +346,7 @@ public class AdvancedPanel extends JPanel {
 			outputA.setBounds(gate.getX() + gate.getWidth(), gate.getY() + 32, 35, 35);
 			outputB.setBounds(gate.getX() + gate.getWidth(), gate.getY() + 136, 35, 35);
 			
-		} else if(block == "hsub") {
+		} else if("hsub".equals(block)) {
 			
 			heading.setText("HALF SUBTRACTOR");
 			gate.setBounds(getWidth()/2 - 110, getHeight()/2 - 150, 351, 236);
@@ -361,7 +360,7 @@ public class AdvancedPanel extends JPanel {
 			outputA.setBounds(gate.getX() + gate.getWidth(), gate.getY() + 31, 35, 35);
 			outputB.setBounds(gate.getX() + gate.getWidth(), gate.getY() + 172, 35, 35);
 			
-		} else if(block == "fsub") {
+		} else if("fsub".equals(block)) {
 			
 			heading.setText("FULL SUBTRACTOR");
 			gate.setBounds(getWidth()/2 - 160, getHeight()/2 - 140, 487, 226);
@@ -376,7 +375,7 @@ public class AdvancedPanel extends JPanel {
 			outputA.setBounds(gate.getX() + gate.getWidth(), gate.getY() + 32, 35, 35);
 			outputB.setBounds(gate.getX() + gate.getWidth(), gate.getY() + 136, 35, 35);
 			
-		} else if(block == "srff") {
+		} else if("srff".equals(block)) {
 			
 			heading.setText("SR FLIP FLOP");
 			gate.setBounds(getWidth()/2 - 110, getHeight()/2 - 150, 358, 244);
@@ -393,7 +392,7 @@ public class AdvancedPanel extends JPanel {
 			state_lbl.setText("State : NO CHANGE");
 			state_lbl.setVisible(true);
 			
-		} else if(block == "jkff") {
+		} else if("jkff".equals(block)) {
 			
 			heading.setText("JK FLIP FLOP");
 			gate.setBounds(getWidth()/2 - 110, getHeight()/2 - 160, 358, 262);
@@ -410,7 +409,7 @@ public class AdvancedPanel extends JPanel {
 			state_lbl.setText("State : NO CHANGE");
 			state_lbl.setVisible(true);
 			
-		} else if(block == "dff") {
+		} else if("dff".equals(block)) {
 			
 			heading.setText("D FLIP FLOP");
 			gate.setBounds(getWidth()/2 - 130, getHeight()/2 - 140, 396, 250);
@@ -424,7 +423,7 @@ public class AdvancedPanel extends JPanel {
 			outputB.setBounds(gate.getX() + gate.getWidth(), gate.getY() + 176, 35, 35);
 			state_lbl.setVisible(false);
 			
-		} else if(block == "tff") {
+		} else if("tff".equals(block)) {
 			
 			heading.setText("T FLIP FLOP");
 			gate.setBounds(getWidth()/2 - 130, getHeight()/2 - 150, 396, 262);

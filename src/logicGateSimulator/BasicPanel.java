@@ -5,11 +5,11 @@ import java.awt.Font;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.Serial;
 import java.util.Collections;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -28,19 +28,20 @@ import javax.swing.SwingUtilities;
 
 public class BasicPanel extends JPanel {
 	
-	private static final long serialVersionUID = 1L;
-	private JTextField inputA;
-	private JTextField inputC;
-	private JTextField inputB;
-	private JTextField output;
-	private JSeparator sep_inB_gt;
-	private JSeparator sep_inC_gt;
-	private JSeparator sep_inA_gt;
-	private JButton calculate_btn;
-	private JLabel gate;
-	private JRadioButton rdbtnBinary;
-	private JRadioButton rdbtnDecimal;
-	private JButton switchMode;
+	@Serial
+    private static final long serialVersionUID = 1L;
+	private final JTextField inputA;
+	private final JTextField inputC;
+	private final JTextField inputB;
+	private final JTextField output;
+	private final JSeparator sep_inB_gt;
+	private final JSeparator sep_inC_gt;
+	private final JSeparator sep_inA_gt;
+	private final JButton calculate_btn;
+	private final JLabel gate;
+	private final JRadioButton rdbtnBinary;
+	private final JRadioButton rdbtnDecimal;
+	private final JButton switchMode;
 
 	/**
 	 * Create the panel.
@@ -55,13 +56,26 @@ public class BasicPanel extends JPanel {
 		int x, y, w;
 		
 //		Icons for Gates -----------------
-		ImageIcon notIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/NOT Gate.png"));
-		ImageIcon andIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/AND Gate.png"));
-		ImageIcon nandIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/NAND Gate.png"));
-		ImageIcon orIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/OR Gate.png"));
-		ImageIcon norIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/NOR Gate.png"));
-		ImageIcon xorIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/EX-OR Gate.png"));
-		ImageIcon xnorIcon = new ImageIcon(LogicGateSimulator.class.getResource("/assets/EX-NOR Gate.png"));
+        ImageIcon notIcon;
+        ImageIcon andIcon;
+        ImageIcon nandIcon;
+        ImageIcon orIcon;
+        ImageIcon norIcon;
+        ImageIcon xorIcon;
+        ImageIcon xnorIcon;
+        try {
+            notIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.NOT_GATE_URL), "NOT Gate");
+            andIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.AND_GATE_URL), "AND Gate");
+            nandIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.NAND_GATE_URL), "NAND Gate");
+            orIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.OR_GATE_URL), "OR Gate");
+            norIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.NOR_GATE_URL), "NOR Gate");
+            xorIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.XOR_GATE_URL), "EX-OR Gate");
+            xnorIcon = new ImageIcon(LogicGateSimulator.class.getResource(Paths.XNOR_GATE_URL), "EX-NOR Gate");
+        } catch (NullPointerException e) {
+            Logger.getAnonymousLogger().severe("Failed to load gate icons.");
+            throw new RuntimeException(e);
+        }
+
 		
 		
 //		Gate Diagram -------------------------------------------
@@ -189,7 +203,7 @@ public class BasicPanel extends JPanel {
 				output.setText(" ");
 				String op = "";
 				
-				if(e.getActionCommand() == "NOT") {
+				if("NOT".equals(e.getActionCommand())) {
 					String inp = rdbtnDecimal.isSelected()?Integer.toBinaryString(Integer.parseInt(inputB.getText())):inputB.getText();
 					if(inp.length() % 2 != 0 && rdbtnDecimal.isSelected())
 						inp = "0" + inp;
@@ -204,22 +218,22 @@ public class BasicPanel extends JPanel {
 					if(inpB.length() % 2 != 0 && rdbtnDecimal.isSelected())
 						inpB = "0" + inpB;
 					
-					if(e.getActionCommand() == "AND")
+					if("AND".equals(e.getActionCommand()))
 						op = LogicGates.and(inpA, inpB);
-					else if(e.getActionCommand() == "OR")
+					else if("OR".equals(e.getActionCommand()))
 						op = LogicGates.or(inpA, inpB);
-					else if(e.getActionCommand() == "NAND")
+					else if("NAND".equals(e.getActionCommand()))
 						op = LogicGates.nand(inpA, inpB);
-					else if(e.getActionCommand() == "NOR")
+					else if("NOR".equals(e.getActionCommand()))
 						op = LogicGates.nor(inpA, inpB);
-					else if(e.getActionCommand() == "EX-OR")
+					else if("EX-OR".equals(e.getActionCommand()))
 						op = LogicGates.xor(inpA, inpB);
-					else if(e.getActionCommand() == "EX-NOR")
+					else if("EX-NOR".equals(e.getActionCommand()))
 						op = LogicGates.xnor(inpA, inpB);
 					
 				}
 				
-				op = rdbtnDecimal.isSelected()?"" + Integer.parseInt(op, 2):op;
+				op = rdbtnDecimal.isSelected() ? "" + Integer.parseInt(op, 2) : op;
 				output.setText(op);
 
 			}
@@ -231,80 +245,78 @@ public class BasicPanel extends JPanel {
 		cb_gate.setFont(new Font("Dialog", Font.BOLD, 14));
 		cb_gate.setBackground(Color.WHITE);
 		cb_gate.setToolTipText("Select Gate");
-		cb_gate.setModel(new DefaultComboBoxModel<String>(new String[] {"  NOT", "  AND", "  OR", "  NAND", "  NOR", "  EX-OR", "  EX-NOR"}));
+		cb_gate.setModel(new DefaultComboBoxModel<>(new String[]{"  NOT", "  AND", "  OR", "  NAND", "  NOR", "  EX-OR", "  EX-NOR"}));
 		cb_gate.setSelectedIndex(0);
 		cb_gate.setBounds(calculate_btn.getX() - 200, calculate_btn.getY(), 104, 38);
 		add(cb_gate);
-		cb_gate.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				output.setText("");
-				switch(e.getItem().toString()) {
-				case "  AND": calculate_btn.setActionCommand("AND");
-						inputA.setVisible(true);
-						inputC.setVisible(true);
-						sep_inA_gt.setVisible(true);
-						sep_inC_gt.setVisible(true);
-						inputB.setVisible(false);
-						sep_inB_gt.setVisible(false);
-						gate.setIcon(andIcon);
-						break;
-				case "  OR": calculate_btn.setActionCommand("OR");
-						inputA.setVisible(true);
-						inputC.setVisible(true);
-						sep_inA_gt.setVisible(true);
-						sep_inC_gt.setVisible(true);
-						inputB.setVisible(false);
-						sep_inB_gt.setVisible(false);
-						gate.setIcon(orIcon);
-						break;
-				case "  NOT": calculate_btn.setActionCommand("NOT");
-						inputA.setVisible(false);
-						inputC.setVisible(false);
-						sep_inA_gt.setVisible(false);
-						sep_inC_gt.setVisible(false);
-						inputB.setVisible(true);
-						sep_inB_gt.setVisible(true);
-						gate.setIcon(notIcon);
-						break;
-				case "  NAND": calculate_btn.setActionCommand("NAND");
-						inputA.setVisible(true);
-						inputC.setVisible(true);
-						sep_inA_gt.setVisible(true);
-						sep_inC_gt.setVisible(true);
-						inputB.setVisible(false);
-						sep_inB_gt.setVisible(false);
-						gate.setIcon(nandIcon);
-						break;
-				case "  NOR": calculate_btn.setActionCommand("NOR");
-						inputA.setVisible(true);
-						inputC.setVisible(true);
-						sep_inA_gt.setVisible(true);
-						sep_inC_gt.setVisible(true);
-						inputB.setVisible(false);
-						sep_inB_gt.setVisible(false);
-						gate.setIcon(norIcon);
-						break;
-				case "  EX-OR": calculate_btn.setActionCommand("EX-OR");
-						inputA.setVisible(true);
-						inputC.setVisible(true);
-						sep_inA_gt.setVisible(true);
-						sep_inC_gt.setVisible(true);
-						inputB.setVisible(false);
-						sep_inB_gt.setVisible(false);
-						gate.setIcon(xorIcon);
-						break;
-				case "  EX-NOR": calculate_btn.setActionCommand("EX-NOR");
-						inputA.setVisible(true);
-						inputC.setVisible(true);
-						sep_inA_gt.setVisible(true);
-						sep_inC_gt.setVisible(true);
-						inputB.setVisible(false);
-						sep_inB_gt.setVisible(false);
-						gate.setIcon(xnorIcon);
-						break;
-				}
-			}
-		});
+		cb_gate.addItemListener(e -> {
+            output.setText("");
+            switch(e.getItem().toString()) {
+            case "  AND": calculate_btn.setActionCommand("AND");
+                    inputA.setVisible(true);
+                    inputC.setVisible(true);
+                    sep_inA_gt.setVisible(true);
+                    sep_inC_gt.setVisible(true);
+                    inputB.setVisible(false);
+                    sep_inB_gt.setVisible(false);
+                    gate.setIcon(andIcon);
+                    break;
+            case "  OR": calculate_btn.setActionCommand("OR");
+                    inputA.setVisible(true);
+                    inputC.setVisible(true);
+                    sep_inA_gt.setVisible(true);
+                    sep_inC_gt.setVisible(true);
+                    inputB.setVisible(false);
+                    sep_inB_gt.setVisible(false);
+                    gate.setIcon(orIcon);
+                    break;
+            case "  NOT": calculate_btn.setActionCommand("NOT");
+                    inputA.setVisible(false);
+                    inputC.setVisible(false);
+                    sep_inA_gt.setVisible(false);
+                    sep_inC_gt.setVisible(false);
+                    inputB.setVisible(true);
+                    sep_inB_gt.setVisible(true);
+                    gate.setIcon(notIcon);
+                    break;
+            case "  NAND": calculate_btn.setActionCommand("NAND");
+                    inputA.setVisible(true);
+                    inputC.setVisible(true);
+                    sep_inA_gt.setVisible(true);
+                    sep_inC_gt.setVisible(true);
+                    inputB.setVisible(false);
+                    sep_inB_gt.setVisible(false);
+                    gate.setIcon(nandIcon);
+                    break;
+            case "  NOR": calculate_btn.setActionCommand("NOR");
+                    inputA.setVisible(true);
+                    inputC.setVisible(true);
+                    sep_inA_gt.setVisible(true);
+                    sep_inC_gt.setVisible(true);
+                    inputB.setVisible(false);
+                    sep_inB_gt.setVisible(false);
+                    gate.setIcon(norIcon);
+                    break;
+            case "  EX-OR": calculate_btn.setActionCommand("EX-OR");
+                    inputA.setVisible(true);
+                    inputC.setVisible(true);
+                    sep_inA_gt.setVisible(true);
+                    sep_inC_gt.setVisible(true);
+                    inputB.setVisible(false);
+                    sep_inB_gt.setVisible(false);
+                    gate.setIcon(xorIcon);
+                    break;
+            case "  EX-NOR": calculate_btn.setActionCommand("EX-NOR");
+                    inputA.setVisible(true);
+                    inputC.setVisible(true);
+                    sep_inA_gt.setVisible(true);
+                    sep_inC_gt.setVisible(true);
+                    inputB.setVisible(false);
+                    sep_inB_gt.setVisible(false);
+                    gate.setIcon(xnorIcon);
+                    break;
+            }
+        });
 		
 //		Label For Gate Choice ---------------------------------
 		JLabel lbl_gt = new JLabel("Select Gate:");
@@ -315,7 +327,7 @@ public class BasicPanel extends JPanel {
 		add(lbl_gt);
 		
 //		TITLE -----------------------------
-		JLabel lblNewLabel = new JLabel("LOGIC Gates Simulator".toUpperCase());
+		JLabel lblNewLabel = new JLabel(Values.Title.toUpperCase());
 		lblNewLabel.setLabelFor(this);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Calibri Light", Font.BOLD, 20));
@@ -385,8 +397,8 @@ public class BasicPanel extends JPanel {
 		switchMode = new JButton("Advanced Mode");
 		switchMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame f = (JFrame) SwingUtilities.getRoot(Values.basicPanel);
-				f.setContentPane(Values.advancedPanel);
+				JFrame f = (JFrame) SwingUtilities.getRoot(Values.getBasicPanel());
+				f.setContentPane(Values.getAdvancedPanel());
 				f.setTitle("Advanced - " + Values.Title);
 			}
 		});

@@ -11,13 +11,26 @@ public class Values {
 	public static int Height = 500;
 	public static int Width = 800;
 	public static Color BgColor = new Color(247, 247, 247);
-	public static JPanel basicPanel = new BasicPanel();
-	public static JPanel advancedPanel = new AdvancedPanel();
+	public static JPanel basicPanel;
+	public static JPanel advancedPanel;
 	public static String ffState = "";
+	
+	public static JPanel getBasicPanel() {
+		if (basicPanel == null) {
+			basicPanel = new BasicPanel();
+		}
+		return basicPanel;
+	}
+	
+	public static JPanel getAdvancedPanel() {
+		if (advancedPanel == null) {
+			advancedPanel = new AdvancedPanel();
+		}
+		return advancedPanel;
+	}
 	
 	public static Rectangle getBounds() {
 		return new Rectangle(X, Y, Width, Height);		
 	}
-	
 	
 }
