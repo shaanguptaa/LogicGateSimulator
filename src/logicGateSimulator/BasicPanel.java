@@ -397,8 +397,8 @@ public class BasicPanel extends JPanel {
 		switchMode = new JButton("Advanced Mode");
 		switchMode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame f = (JFrame) SwingUtilities.getRoot(Values.basicPanel);
-				f.setContentPane(Values.advancedPanel);
+				JFrame f = (JFrame) SwingUtilities.getRoot(Values.getBasicPanel());
+				f.setContentPane(Values.getAdvancedPanel());
 				f.setTitle("Advanced - " + Values.Title);
 			}
 		});

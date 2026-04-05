@@ -8,15 +8,21 @@ public class LogicGateSimulator extends JFrame {
 
 	@Serial
     private static final long serialVersionUID = 1L;
-	static void main() {
-		EventQueue.invokeLater(() -> {
-            try {
-                LogicGateSimulator frame = new LogicGateSimulator();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+	public static void main(String[] args) {
+		try {
+			EventQueue.invokeLater(() -> {
+				try {
+					LogicGateSimulator frame = new LogicGateSimulator();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.err.println("Error creating frame: " + e.getMessage());
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Error in main: " + e.getMessage());
+		}
 	}
 
 	public LogicGateSimulator() {
@@ -26,6 +32,6 @@ public class LogicGateSimulator extends JFrame {
 //		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBounds(Values.getBounds());
 		setResizable(false);		
-		setContentPane(Values.basicPanel);
+		setContentPane(Values.getBasicPanel());
 	}
 }
